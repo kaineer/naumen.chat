@@ -20,7 +20,13 @@ class MessagesController < ApplicationController
 
   # POST /messages
   def create
-    current_user.messages.create(:text => params[:message][:text])
-    redirect_to messages_path
+    @message = current_user.messages.create(:text => params[:message][:text])
+    respond_with do |format|
+      format.html { redirect_to messages_path }
+      format.json {
+        render :json => {:collection => [@message.as_hash]}
+        session[:update_time] = Time.new + 0.25
+      }
+    end
   end
 end
