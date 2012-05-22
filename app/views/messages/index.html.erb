@@ -1,0 +1,14 @@
+<div class="index-page">
+	<%= form_for(@message, :url => { :action => "add" }) do |f| %>
+		<%= f.text_area :text, :size => "60x5" %>
+		<br/>
+		<%= f.submit "Добавить сообщение" %>
+	<% end %>
+    <dl id="list">
+	  <% @collection.each do |msg| %>
+	    <dt><%= msg.user.name %></dt>
+	    <dd><%= msg.text %></dd>
+	  <% end %>
+    </dl>	
+</div>
+<%= javascript_tag( "$(document).ready( reloadFunc );" ) %>

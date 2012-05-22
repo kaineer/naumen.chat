@@ -1,0 +1,6 @@
+<div class="login-form">
+	<%= form_for(@user, :url => { :action => "add" }) do |f| %>
+		<%= f.text_field :name %>
+		<%= f.submit "Войти" %>
+	<% end %>
+</div>
