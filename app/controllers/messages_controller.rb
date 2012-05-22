@@ -7,13 +7,13 @@ class MessagesController < ApplicationController
       format.html do
         @collection = Message.recent.for_display.all
         @message = Message.new
-        session[:update_time] = Time.new
+        session[:last_id] = @collection.last.id unless @collection.empty?
       end
 
       format.json do
-        collection = Message.sent_after(session[:update_time]).for_display.map(&:as_hash)
-        render :json => {:collection => collection}
-        session[:update_time] = Time.new
+        collection = Message.sent_after(session[:last_id] || 0).for_display
+        render :json => {:collection => collection.map(&:as_hash)}
+        session[:last_id] = collection.last.id unless collection.empty?
       end
     end
   end
@@ -25,7 +25,7 @@ class MessagesController < ApplicationController
       format.html { redirect_to messages_path }
       format.json {
         render :json => {:collection => [@message.as_hash]}
-        session[:update_time] = Time.new + 0.25
+        session[:last_id] = @message.id
       }
     end
   end

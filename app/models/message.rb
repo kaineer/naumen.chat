@@ -4,9 +4,9 @@ class Message < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :text, :allow_blank => false
 
-  scope :recent, includes(:user).order("created_at DESC").limit(20)
-  scope :sent_after, lambda { |time|
-    includes(:user).order("created_at DESC").where(["created_at >= ?", time])
+  scope :recent, includes(:user).order("id DESC").limit(20)
+  scope :sent_after, lambda { |last_id|
+    includes(:user).order("id DESC").where(["id > ?", last_id])
   }
   scope :for_display, select([:text, :user_id])
 
