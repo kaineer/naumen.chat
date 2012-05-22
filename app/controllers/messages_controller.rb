@@ -20,9 +20,7 @@ class MessagesController < ApplicationController
 
   # POST /messages
   def create
-    usr = User.where(:id => session[:user_id]).first
-  	txt = params[:message][:text]
-    usr.messages.create(:text => txt) unless usr.nil? || txt.blank?
-	  redirect_to :action => 'index'
+    current_user.messages.create(:text => params[:message][:text])
+    redirect_to messages_path
   end
 end
