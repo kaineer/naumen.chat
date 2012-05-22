@@ -1,17 +1,20 @@
 class UsersController < ApplicationController
-	def login
+	# GET /users
+	def index
 		@user = User.new
 	end
-	
-	def add
-	    user_name = params[:user][:name]
-		if user_name.blank?
-			redirect_to :action => 'login'
-			return
+
+	# POST /users
+	def create
+		user_name = params[:user][:name]
+
+		User.find_or_create_by_name(user_name).tap do |user|
+			if user.valid?
+				session[:user_id] = user.id
+				redirect_to "/messages"
+			else
+				redirect_to root_path
+			end
 		end
-		usr = User.where(:name => user_name).first
-		usr = User.create(:name => user_name) if usr.nil?
-		session[:user_id] = usr.id
-		redirect_to :controller => 'messages', :action => 'index'
 	end
 end
