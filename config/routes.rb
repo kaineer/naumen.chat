@@ -51,7 +51,7 @@ Chat::Application.routes.draw do
   root :to => 'users#index'
 
   resources :users, :only => [:index, :create]
-  resources :messages, :only => [:new, :index, :create]
+  resources :messages, :only => [:index, :create]
 
   # See how all your routes lay out with "rake routes"
 

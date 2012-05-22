@@ -8,6 +8,7 @@ class Message < ActiveRecord::Base
   scope :sent_after, lambda { |time|
     includes(:user).order("created_at DESC").where(["created_at >= ?", time])
   }
+  scope :for_display, select([:text, :user_id])
 
   def as_hash
     { :text => text,

@@ -1,5 +1,5 @@
 <div class="index-page">
-	<%= form_for(@message, :url => { :action => "add" }) do |f| %>
+	<%= form_for(@message, :url => messages_path) do |f| %>
 		<%= f.text_area :text, :size => "60x5" %>
 		<br/>
 		<%= f.submit "Добавить сообщение" %>

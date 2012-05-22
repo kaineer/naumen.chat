@@ -1,5 +1,5 @@
 reloadFunc = function() {
-	$.getJSON('/messages/update.json', {}, function(data) {
+	$.getJSON('/messages.json', {}, function(data) {
 		if(data.collection != null) {
 		  var html = "";
 		  _(data.collection).each(function(msg) {

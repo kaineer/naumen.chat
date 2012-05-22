@@ -1,18 +1,25 @@
 class MessagesController < ApplicationController
+  respond_to :html, :json
+
+  # GET /messages
   def index
-    @collection = Message.recent.all
-    session[:update_time] =  Time.new
-	  @message = Message.new
+    respond_with do |format|
+      format.html do
+        @collection = Message.recent.for_display.all
+        @message = Message.new
+        session[:update_time] = Time.new
+      end
+
+      format.json do
+        collection = Message.sent_after(session[:update_time]).for_display.map(&:as_hash)
+        render :json => {:collection => collection}
+        session[:update_time] = Time.new
+      end
+    end
   end
 
-  def update
-    t = session[:update_time]
-    session[:update_time] =  Time.new
-    collection = Message.sent_after(t).all
-  	render :json => {:collection => collection.map(&:as_hash)}
-  end
-
-  def add
+  # POST /messages
+  def create
     usr = User.where(:id => session[:user_id]).first
   	txt = params[:message][:text]
     usr.messages.create(:text => txt) unless usr.nil? || txt.blank?
