@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
   def index
-    @collection = Message.includes(:user).order('created_at DESC').limit(20).all
+    @collection = Message.recent.all
     session[:update_time] =  Time.new
 	  @message = Message.new
   end
@@ -8,9 +8,8 @@ class MessagesController < ApplicationController
   def update
     t = session[:update_time]
     session[:update_time] =  Time.new
-  	collection = Message.includes(:user).order('created_at DESC').where(['created_at >= ?', t]).all
-  	ret_collection = collection.map {|msg| {:text => msg.text, :user_name => msg.user.name} }
-  	render :json => {:collection =>  ret_collection}
+    collection = Message.sent_after(t).all
+  	render :json => {:collection => collection.map(&:as_hash)}
   end
 
   def add

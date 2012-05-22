@@ -3,8 +3,8 @@ reloadFunc = function() {
 		if(data.collection != null) {
 		  var html = "";
 		  _(data.collection).each(function(msg) {
+		  	html += "<dt>" + msg.user_name + "</dd>";
 		  	html += "<dd>" + msg.text + "</dd>";
-		  	html += "<dt>" + mst.user_name + "</dd>";
 		  });
 
 		  $("#list").prepend(html);
