@@ -3,18 +3,22 @@ class MessagesController < ApplicationController
 
   # GET /messages
   def index
-    respond_with do |format|
-      format.html do
-        @collection = Message.recent.for_display.all
-        @message = Message.new
-        session[:last_id] = @collection.last.id unless @collection.empty?
-      end
+    if current_user
+      respond_with do |format|
+        format.html do
+          @collection = Message.recent.for_display.all
+          @message = Message.new
+          session[:last_id] = @collection.first.id unless @collection.empty?
+        end
 
-      format.json do
-        collection = Message.sent_after(session[:last_id] || 0).for_display
-        render :json => {:collection => collection.map(&:as_hash)}
-        session[:last_id] = collection.last.id unless collection.empty?
+        format.json do
+          collection = Message.sent_after(session[:last_id] || 0).for_display
+          render :json => {:collection => collection.map(&:as_hash)}
+          session[:last_id] = collection.first.id unless collection.empty?
+        end
       end
+    else
+      redirect_to root_path
     end
   end
 
