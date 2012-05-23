@@ -3,3 +3,5 @@ gem 'rails'
 gem 'sqlite3'
 gem 'jquery-rails'
 gem 'underscore-rails'
+
+gem 'pry'

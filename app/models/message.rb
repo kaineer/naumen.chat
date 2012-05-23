@@ -8,7 +8,7 @@ class Message < ActiveRecord::Base
   scope :sent_after, lambda { |last_id|
     includes(:user).order("id DESC").where(["id > ?", last_id])
   }
-  scope :for_display, select([:text, :user_id])
+  scope :for_display, select([:text, :user_id, :id])
 
   def as_hash
     { :text => text,
